@@ -116,7 +116,7 @@ class FinanceRepositoryImpl @Inject constructor(
         return Transaction(
             id = id,
             amount = amount,
-            category = Category(id = categoryId, name = "", iconRes = "", color = "", type = ""),
+            category = Category(id = categoryId, name = "", iconRes = "", color = 0, type = ""),
             date = date,
             note = note,
             type = type

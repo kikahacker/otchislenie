@@ -3,21 +3,23 @@ package com.example.otchislenie.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.otchislenie.domain.model.FinanceState
-import com.example.otchislenie.domain.model.PeriodType
+import com.example.otchislenie.domain.model.Transaction
+
+import com.example.otchislenie.domain.repository.FinanceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.DayOfWeek
+import java.time.LocalDate
 import java.time.LocalTime
-import java.time.temporal.TemporalAdjusters
+import java.time.ZoneOffset
 import javax.inject.Inject
 
 @HiltViewModel
 class FinanceViewModel @Inject constructor(
-    private val getTransactionsUseCase: GetTransactionsUseCase,
-    private val addTransactionUseCase: AddTransactionUseCase
+    private val repository: FinanceRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(FinanceState())
@@ -27,19 +29,11 @@ class FinanceViewModel @Inject constructor(
         loadData()
     }
 
-    fun changePeriod(periodType: PeriodType) {
-        _state.update { it.copy(currentPeriod = periodType) }
-        loadData()
-    }
-
     fun changeDate(forward: Boolean) {
-        val currentDate = _state.value.currentDate
-        val newDate = when (_state.value.currentPeriod) {
-            PeriodType.DAY -> if (forward) currentDate.plusDays(1) else currentDate.minusDays(1)
-            PeriodType.WEEK -> if (forward) currentDate.plusWeeks(1) else currentDate.minusWeeks(1)
-            PeriodType.MONTH -> if (forward) currentDate.plusMonths(1) else currentDate.minusMonths(1)
-            PeriodType.YEAR -> if (forward) currentDate.plusYears(1) else currentDate.minusYears(1)
-        }
+        val newDate = if (forward)
+            _state.value.currentDate.plusDays(1)
+        else
+            _state.value.currentDate.minusDays(1)
         _state.update { it.copy(currentDate = newDate) }
         loadData()
     }
@@ -48,8 +42,12 @@ class FinanceViewModel @Inject constructor(
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
             try {
-                val (startDate, endDate) = calculateDateRange()
-                val transactions = getTransactionsUseCase(startDate, endDate)
+                val startOfDay = _state.value.currentDate.atStartOfDay().toEpochSecond(ZoneOffset.ofHours(3))
+                val endOfDay = _state.value.currentDate.atTime(LocalTime.MAX).toEpochSecond(
+                    ZoneOffset.ofHours(3))
+
+                val transactions = repository.getTransactionsByDate(startOfDay, endOfDay)
+                    .first() // Берем первый результат Flow
 
                 val expenses = transactions.filter { it.type == "expense" }
                 val incomes = transactions.filter { it.type == "income" }
@@ -69,26 +67,23 @@ class FinanceViewModel @Inject constructor(
         }
     }
 
-    private fun calculateDateRange(): Pair<Long, Long> {
-        return when (_state.value.currentPeriod) {
-            PeriodType.DAY -> _state.value.currentDate.atStartOfDay().toEpochSecond() to
-                    _state.value.currentDate.atTime(LocalTime.MAX).toEpochSecond()
-            PeriodType.WEEK -> {
-                val firstDay = _state.value.currentDate.with(TemporalAdjusters.previousOrSame(
-                    DayOfWeek.MONDAY))
-                val lastDay = firstDay.plusDays(6)
-                firstDay.atStartOfDay().toEpochSecond() to lastDay.atTime(LocalTime.MAX).toEpochSecond()
-            }
-            PeriodType.MONTH -> {
-                val firstDay = _state.value.currentDate.withDayOfMonth(1)
-                val lastDay = _state.value.currentDate.with(TemporalAdjusters.lastDayOfMonth())
-                firstDay.atStartOfDay().toEpochSecond() to lastDay.atTime(LocalTime.MAX).toEpochSecond()
-            }
-            PeriodType.YEAR -> {
-                val firstDay = _state.value.currentDate.withDayOfYear(1)
-                val lastDay = _state.value.currentDate.with(TemporalAdjusters.lastDayOfYear())
-                firstDay.atStartOfDay().toEpochSecond() to lastDay.atTime(LocalTime.MAX).toEpochSecond()
+    fun addTransaction(transaction: Transaction) {
+        viewModelScope.launch {
+            try {
+                repository.addTransaction(transaction)
+                loadData() // Обновляем данные после добавления
+            } catch (e: Exception) {
+                _state.update { it.copy(error = "Ошибка добавления: ${e.message}") }
             }
         }
     }
 }
+
+data class FinanceState(
+    val currentDate: LocalDate = LocalDate.now(),
+    val expenses: List<Transaction> = emptyList(),
+    val incomes: List<Transaction> = emptyList(),
+    val balance: Double = 0.0,
+    val isLoading: Boolean = false,
+    val error: String? = null
+)

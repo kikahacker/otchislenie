@@ -8,7 +8,7 @@ data class CategoryEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val name: String,
     val iconRes: String, // или Int если используете ресурсы Android
-    val color: String, // в формате "#RRGGBB"
+    val color: Int, // в формате "#RRGGBB"
     val type: String, // "income" или "expense"
     val isUserCreated: Boolean = false // для разделения системных и пользовательских категорий
 ) {

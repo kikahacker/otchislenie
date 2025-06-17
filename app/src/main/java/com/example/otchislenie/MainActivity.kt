@@ -6,7 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.example.otchislenie.data.local.database.AppDatabase
 import com.example.otchislenie.data.repository.FinanceRepositoryImpl
-import com.example.otchislenie.ui.screen.FinanceScreen
+
+import com.example.otchislenie.ui.screen.HomePageContent
 import com.example.otchislenie.ui.theme.MatuleTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,7 +22,7 @@ class MainActivity : ComponentActivity() {
         )
         setContent {
             MatuleTheme {
-                FinanceScreen(repository)
+                HomePageContent()
             }
         }
     }

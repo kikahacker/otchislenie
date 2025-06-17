@@ -24,6 +24,6 @@ interface TransactionDao {
 
     @Query("SELECT * FROM transactions WHERE date BETWEEN :start AND :end ORDER BY date DESC")
     fun getTransactionsByDate(start: Long, end: Long): Flow<List<TransactionEntity>>
-    @Query("SELECT * FROM transactions WHERE categoryId")
-    fun getTransactionsByCategory(categoryId:Long):Flow<List<TransactionEntity>>
+    @Query("SELECT * FROM transactions WHERE categoryId = :categoryId")
+    fun getTransactionsByCategory(categoryId: Long): Flow<List<TransactionEntity>>
 }

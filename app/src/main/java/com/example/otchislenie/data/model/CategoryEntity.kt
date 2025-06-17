@@ -20,14 +20,14 @@ data class CategoryEntity(
                     id = 1,
                     name = "Еда",
                     iconRes = "ic_food",
-                    color = "#FF9800",
+                    color = 0,
                     type = "expense"
                 ),
                 CategoryEntity(
                     id = 2,
                     name = "Транспорт",
                     iconRes = "ic_transport",
-                    color = "#2196F3",
+                    color = 0,
                     type = "expense"
                 ),
                 // Другие категории...
@@ -41,14 +41,14 @@ data class CategoryEntity(
                     id = 100,
                     name = "Зарплата",
                     iconRes = "ic_salary",
-                    color = "#4CAF50",
+                    color = 0,
                     type = "income"
                 ),
                 CategoryEntity(
                     id = 101,
                     name = "Инвестиции",
                     iconRes = "ic_investment",
-                    color = "#9C27B0",
+                    color = 0,
                     type = "income"
                 )
             )

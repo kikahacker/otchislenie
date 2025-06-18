@@ -31,6 +31,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
@@ -45,7 +46,7 @@ import com.example.otchislenie.R
 @Preview
 @Composable
 fun HomePageContent(){
-    val sizeIcons = 60.dp
+    val sizeIcons = 50.dp
     Column() {
         Row(
             modifier = Modifier
@@ -118,41 +119,43 @@ fun HomePageContent(){
             OutlinedButton(onClick = { /*TODO*/ },
                 modifier= Modifier.size(sizeIcons),  //avoid the oval shape
                 shape = CircleShape,
-                border= BorderStroke(1.dp, Color.Blue),
+                border = BorderStroke(1.dp,Color.Transparent),
                 contentPadding = PaddingValues(0.dp),  //avoid the little icon
-                colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
+                colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color(0xFF20B2AA))
             ) {
                 Icon(
                     painter = painterResource(R.drawable.free_icon_house_5687455),
-                    contentDescription = null
+                    contentDescription = null, modifier = Modifier.padding(3.dp)
                 )
             }
             OutlinedButton(onClick = { /*TODO*/ },
                 modifier= Modifier.size(sizeIcons),  //avoid the oval shape
                 shape = CircleShape,
-                border= BorderStroke(1.dp, Color.Blue),
+                border = BorderStroke(1.dp,Color.Transparent),
                 contentPadding = PaddingValues(0.dp),  //avoid the little icon
-                colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Green)
+                colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color(0xFF008000))
             ) {
-                Icon(painter = painterResource(R.drawable.free_icon_dumbbell_4205515), contentDescription = null)
+                Icon(painter = painterResource(R.drawable.free_icon_dumbbell_4205515), contentDescription = null,
+                    modifier = Modifier.padding(3.dp))
             }
             OutlinedButton(onClick = { /*TODO*/ },
                 modifier= Modifier.size(sizeIcons),  //avoid the oval shape
                 shape = CircleShape,
-                border= BorderStroke(1.dp, Color.Blue),
+                border = BorderStroke(1.dp,Color.Transparent),
                 contentPadding = PaddingValues(0.dp),  //avoid the little icon
                 colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color(0xFFFFA500))
             ) {
-                Icon(painter = painterResource(R.drawable.free_icon_cocktail_259953), contentDescription = null)
+                Icon(painter = painterResource(R.drawable.free_icon_cocktail_259953), contentDescription = null,
+                    modifier = Modifier.padding(3.dp))
             }
             OutlinedButton(onClick = { /*TODO*/ },
                 modifier= Modifier.size(sizeIcons),  //avoid the oval shape
                 shape = CircleShape,
-                border= BorderStroke(1.dp, Color.Blue),
+                border = BorderStroke(1.dp,Color.Transparent),
                 contentPadding = PaddingValues(0.dp),  //avoid the little icon
                 colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color(0xFF8A2BE2))
             ) {
-                Icon(painter = painterResource(R.drawable.free_icon_car_5670285), contentDescription = null, modifier = Modifier.padding(3.dp))
+                Icon(painter = painterResource(R.drawable.free_icon_clothes_864332), contentDescription = null, modifier = Modifier.padding(8.dp))
             }
         }
         Box(modifier = Modifier.padding(top = 40.dp)){
@@ -160,27 +163,27 @@ fun HomePageContent(){
                 OutlinedButton(onClick = { /*TODO*/ },
                     modifier= Modifier.size(sizeIcons),  //avoid the oval shape
                     shape = CircleShape,
-                    border= BorderStroke(1.dp, Color.Blue),
+                    border = BorderStroke(1.dp,Color.Transparent),
                     contentPadding = PaddingValues(0.dp),  //avoid the little icon
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color(0xFFFF69B4))
                 ) {
-                    Icon(painter = painterResource(R.drawable.free_icon_car_5670285), contentDescription = null)
+                    Icon(painter = painterResource(R.drawable.free_icon_food_basket_18902103), contentDescription = null, modifier = Modifier.padding(5.dp))
                 }
                 OutlinedButton(onClick = { /*TODO*/ },
                     modifier= Modifier.size(sizeIcons),  //avoid the oval shape
                     shape = CircleShape,
-                    border= BorderStroke(1.dp, Color.Blue),
+                    border = BorderStroke(1.dp,Color.Transparent),
                     contentPadding = PaddingValues(0.dp),  //avoid the little icon
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Gray)
                 ) {
-                    Icon(painter = painterResource(R.drawable.free_icon_car_5670285), contentDescription = null)
+                    Icon(painter = painterResource(R.drawable.free_icon_telephone_159832), contentDescription = null, modifier = Modifier.padding(5.dp))
                 }
                 OutlinedButton(onClick = { /*TODO*/ },
-                    modifier= Modifier.size(sizeIcons),  //avoid the oval shape
+                    modifier= Modifier.size(sizeIcons+3.dp),  //avoid the oval shape
                     shape = CircleShape,
-                    border= BorderStroke(1.dp, Color.Blue),
+                    border = BorderStroke(1.dp,Color.Transparent),
                     contentPadding = PaddingValues(0.dp),  //avoid the little icon
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.DarkGray)
                 ) {
                     Icon(painter = painterResource(R.drawable.free_icon_car_5670285), contentDescription = null)
                 }
@@ -189,29 +192,29 @@ fun HomePageContent(){
                 OutlinedButton(onClick = { /*TODO*/ },
                     modifier= Modifier.size(sizeIcons),  //avoid the oval shape
                     shape = CircleShape,
-                    border= BorderStroke(1.dp, Color.Blue),
+                    border = BorderStroke(1.dp,Color.Transparent),
                     contentPadding = PaddingValues(0.dp),  //avoid the little icon
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color(0xFF9ACD32))
                 ) {
-                    Icon(painter = painterResource(R.drawable.free_icon_car_5670285), contentDescription = null)
+                    Icon(painter = painterResource(R.drawable.free_icon_restaurant_562678), contentDescription = null, modifier = Modifier.padding(5.dp))
                 }
                 OutlinedButton(onClick = { /*TODO*/ },
                     modifier= Modifier.size(sizeIcons),  //avoid the oval shape
                     shape = CircleShape,
-                    border= BorderStroke(1.dp, Color.Blue),
+                    border = BorderStroke(1.dp,Color.Transparent),
                     contentPadding = PaddingValues(0.dp),  //avoid the little icon
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color(0xFF6B8E23))
                 ) {
-                    Icon(painter = painterResource(R.drawable.free_icon_car_5670285), contentDescription = null)
+                    Icon(painter = painterResource(R.drawable.free_icon_pawprint_1050915), contentDescription = null, modifier = Modifier.padding(3.dp))
                 }
                 OutlinedButton(onClick = { /*TODO*/ },
-                    modifier= Modifier.size(sizeIcons),  //avoid the oval shape
+                    modifier= Modifier.size(sizeIcons+2.dp),  //avoid the oval shape
                     shape = CircleShape,
-                    border= BorderStroke(1.dp, Color.Blue),
+                    border = BorderStroke(1.dp,Color.Transparent),
                     contentPadding = PaddingValues(0.dp),  //avoid the little icon
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color(0xFFFA8072))
                 ) {
-                    Icon(painter = painterResource(R.drawable.free_icon_car_5670285), contentDescription = null)
+                    Icon(painter = painterResource(R.drawable.free_icon_tram_4332345), contentDescription = null)
                 }
             }
         }
@@ -220,41 +223,42 @@ fun HomePageContent(){
             OutlinedButton(onClick = { /*TODO*/ },
                 modifier= Modifier.size(sizeIcons),  //avoid the oval shape
                 shape = CircleShape,
-                border= BorderStroke(1.dp, Color.Blue),
+                border = BorderStroke(1.dp,Color.Transparent),
                 contentPadding = PaddingValues(0.dp),  //avoid the little icon
-                colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
+                colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color(0xFFFF4500))
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.free_icon_car_5670285),
-                    contentDescription = null
+                    painter = painterResource(R.drawable.free_icon_gift_116392),
+                    contentDescription = null,
+                    modifier = Modifier.padding(5.dp)
                 )
             }
             OutlinedButton(onClick = { /*TODO*/ },
                 modifier= Modifier.size(sizeIcons),  //avoid the oval shape
                 shape = CircleShape,
-                border= BorderStroke(1.dp, Color.Blue),
+                border = BorderStroke(1.dp,Color.Transparent),
                 contentPadding = PaddingValues(0.dp),  //avoid the little icon
-                colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
+                colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color(0xFFFFD700))
             ) {
-                Icon(painter = painterResource(R.drawable.free_icon_car_5670285), contentDescription = null)
+                Icon(painter = painterResource(R.drawable.taxi), contentDescription = null, modifier = Modifier.padding(5.dp))
             }
             OutlinedButton(onClick = { /*TODO*/ },
                 modifier= Modifier.size(sizeIcons),  //avoid the oval shape
                 shape = CircleShape,
-                border= BorderStroke(1.dp, Color.Blue),
+                border = BorderStroke(1.dp,Color.Transparent),
                 contentPadding = PaddingValues(0.dp),  //avoid the little icon
-                colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
+                colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color(0xFF32CD32))
             ) {
-                Icon(painter = painterResource(R.drawable.free_icon_car_5670285), contentDescription = null)
+                Icon(painter = painterResource(R.drawable.free_icon_personal_hygiene_5532356), contentDescription = null, modifier = Modifier.padding(5.dp))
             }
             OutlinedButton(onClick = { /*TODO*/ },
                 modifier= Modifier.size(sizeIcons),  //avoid the oval shape
                 shape = CircleShape,
-                border= BorderStroke(1.dp, Color.Blue),
+                border = BorderStroke(1.dp,Color.Transparent),
                 contentPadding = PaddingValues(0.dp),  //avoid the little icon
-                colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
+                colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color(0xFF2F4F4F))
             ) {
-                Icon(painter = painterResource(R.drawable.free_icon_car_5670285), contentDescription = null)
+                Icon(painter = painterResource(R.drawable.free_icon_pills_4417863), contentDescription = null, modifier = Modifier.padding(5.dp))
             }
         }
     }

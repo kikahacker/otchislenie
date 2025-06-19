@@ -26,4 +26,22 @@ interface TransactionDao {
     fun getTransactionsByDate(start: Long, end: Long): Flow<List<TransactionEntity>>
     @Query("SELECT * FROM transactions WHERE categoryId = :categoryId")
     fun getTransactionsByCategory(categoryId: Long): Flow<List<TransactionEntity>>
+    @Query("""
+        SELECT c.id, c.name, SUM(t.amount) as total 
+        FROM transactions t 
+        JOIN categories c ON t.categoryId = c.id 
+        WHERE t.type = 'expense' 
+        AND t.date BETWEEN :startDate AND :endDate
+        GROUP BY c.id, c.name
+    """)
+    fun getExpensesByCategory(startDate: Long, endDate: Long): Flow<List<CategoryWithAmount>>
+
+    data class CategoryWithAmount(
+        val id: Long,
+        val name: String,
+        val total: Double
+    )
+
+    @Query("DELETE FROM transactions")
+    suspend fun deleteAllTransactions()
 }

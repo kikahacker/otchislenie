@@ -110,7 +110,17 @@ class FinanceRepositoryImpl @Inject constructor(
         return budgetDao.getBudgetById(id)?.toDomain()
     }
     // endregion
-
+    override fun getExpensesByCategory(startDate: Long, endDate: Long): Flow<List<FinanceRepository.CategoryWithAmount>> {
+        return transactionDao.getExpensesByCategory(startDate, endDate).map { list ->
+            list.map {
+                FinanceRepository.CategoryWithAmount(
+                    categoryId = it.id,
+                    categoryName = it.name,
+                    totalAmount = it.total
+                )
+            }
+        }
+    }
     // region Вспомогательные методы преобразования
     private fun TransactionEntity.toDomain(): Transaction {
         return Transaction(
@@ -142,7 +152,17 @@ class FinanceRepositoryImpl @Inject constructor(
             type = type
         )
     }
+    override suspend fun clearAllData() {
+        transactionDao.deleteAllTransactions()
+        categoryDao.deleteAllCategories()
+        budgetDao.deleteAllBudgets()
 
+        // После очистки можно снова добавить дефолтные категории
+        categoryDao.insertDefaultCategories(
+            CategoryEntity.defaultExpenseCategories() +
+                    CategoryEntity.defaultIncomeCategories()
+        )
+    }
     private fun CategoryEntity.toDomain(): Category {
         return Category(
             id = id,

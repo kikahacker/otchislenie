@@ -22,6 +22,13 @@ interface FinanceRepository {
     fun getAllCategories(): Flow<List<Category>>
     fun getCategoriesByType(type: String): Flow<List<Category>> // "income" или "expense"
     suspend fun getCategoryById(id: Long): Category?
+    fun getExpensesByCategory(startDate: Long, endDate: Long): Flow<List<CategoryWithAmount>>
+
+    data class CategoryWithAmount(
+        val categoryId: Long,
+        val categoryName: String,
+        val totalAmount: Double
+    )
 
     // Бюджеты
     suspend fun addBudget(budget: Budget)
@@ -31,4 +38,6 @@ interface FinanceRepository {
     fun getActiveBudgets(): Flow<List<Budget>>
     fun getBudgetsForDate(date: Long): Flow<List<Budget>>
     suspend fun getBudgetById(id: Long): Budget?
+
+    suspend fun clearAllData()
 }

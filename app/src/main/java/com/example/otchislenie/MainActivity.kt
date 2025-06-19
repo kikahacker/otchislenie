@@ -9,6 +9,7 @@ import com.example.otchislenie.data.repository.FinanceRepositoryImpl
 
 import com.example.otchislenie.ui.screen.HomePageContent
 import com.example.otchislenie.ui.theme.MatuleTheme
+import com.example.otchislenie.ui.viewmodels.FinanceViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,9 +21,10 @@ class MainActivity : ComponentActivity() {
             categoryDao = db.categoryDao(),
             budgetDao = db.budgetDao()
         )
+        val viewModel = FinanceViewModel(repository)
         setContent {
             MatuleTheme {
-                HomePageContent()
+                HomePageContent(viewModel)
             }
         }
     }

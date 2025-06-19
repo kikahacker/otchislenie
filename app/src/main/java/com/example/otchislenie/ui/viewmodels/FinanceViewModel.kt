@@ -2,11 +2,13 @@ package com.example.otchislenie.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.otchislenie.domain.model.Category
 import com.example.otchislenie.domain.model.FinanceState
 import com.example.otchislenie.domain.model.Transaction
 
 import com.example.otchislenie.domain.repository.FinanceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
@@ -71,11 +73,82 @@ class FinanceViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 repository.addTransaction(transaction)
-                loadData() // Обновляем данные после добавления
+                // Обновляем данные после добавления
+                loadPieChartData()
+                loadData() // Если нужно обновить другие данные
             } catch (e: Exception) {
-                _state.update { it.copy(error = "Ошибка добавления: ${e.message}") }
+                // Обработка ошибок
             }
         }
+    }
+    // Новые состояния для PieChart
+    private val _pieChartData = MutableStateFlow<Map<String, Double>>(emptyMap())
+    val pieChartData = _pieChartData.asStateFlow()
+
+    private val _timeRange = MutableStateFlow(TimeRange.MONTH)
+    val timeRange = _timeRange.asStateFlow()
+
+    // Загрузка данных для PieChart
+    fun loadPieChartData() {
+        viewModelScope.launch {
+            val (startDate, endDate) = getDateRange(_timeRange.value)
+
+            repository.getExpensesByCategory(startDate, endDate)
+                .collect { categories ->
+                    val data = categories.associate {
+                        it.categoryName to it.totalAmount
+                    }
+                    _pieChartData.value = data
+                }
+        }
+    }
+    fun clearDatabase() {
+        viewModelScope.launch {
+            try {
+                repository.clearAllData()
+                // Обновляем UI после очистки
+                loadPieChartData()
+                loadData()
+            } catch (e: Exception) {
+                // Обработка ошибок
+            }
+        }
+    }
+    fun getCategoriesByType(type: String): Flow<List<Category>> {
+        return repository.getCategoriesByType(type)
+    }
+    // Изменение временного диапазона
+    fun setTimeRange(range: TimeRange) {
+        _timeRange.value = range
+        loadPieChartData()
+    }
+
+    // Вычисление диапазона дат
+    private fun getDateRange(range: TimeRange): Pair<Long, Long> {
+        val now = System.currentTimeMillis()
+        return when (range) {
+            TimeRange.DAY -> {
+                val start = LocalDate.now().atStartOfDay().toEpochSecond(ZoneOffset.UTC) * 1000
+                start to now
+            }
+            TimeRange.WEEK -> {
+                val start = LocalDate.now().minusDays(7).atStartOfDay().toEpochSecond(ZoneOffset.UTC) * 1000
+                start to now
+            }
+            TimeRange.MONTH -> {
+                val start = LocalDate.now().minusMonths(1).atStartOfDay().toEpochSecond(ZoneOffset.UTC) * 1000
+                start to now
+            }
+            TimeRange.YEAR -> {
+                val start = LocalDate.now().minusYears(1).atStartOfDay().toEpochSecond(ZoneOffset.UTC) * 1000
+                start to now
+            }
+            TimeRange.ALL -> 0L to now
+        }
+    }
+
+    enum class TimeRange {
+        DAY, WEEK, MONTH, YEAR, ALL
     }
 }
 

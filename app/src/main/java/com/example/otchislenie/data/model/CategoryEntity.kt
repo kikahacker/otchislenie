@@ -18,19 +18,88 @@ data class CategoryEntity(
             return listOf(
                 CategoryEntity(
                     id = 1,
-                    name = "Еда",
-                    iconRes = "ic_food",
+                    name = "Дом",
+                    iconRes = "",
                     color = 0,
                     type = "expense"
                 ),
                 CategoryEntity(
                     id = 2,
-                    name = "Транспорт",
-                    iconRes = "ic_transport",
+                    name = "Спорт",
+                    iconRes = "",
                     color = 0,
                     type = "expense"
                 ),
-                // Другие категории...
+                CategoryEntity(
+                    id = 3,
+                    name = "Развлечения",
+                    iconRes = "",
+                    color = 0,
+                    type = "expense"
+                ),
+                CategoryEntity(
+                    id = 4,
+                    name = "Одежда",
+                    iconRes = "",
+                    color = 0,
+                    type = "expense"
+                ),
+                CategoryEntity(
+                    id = 5,
+                    name = "Еда",
+                    iconRes = "",
+                    color = 0,
+                    type = "expense"
+                ),
+                CategoryEntity(
+                    id = 6,
+                    name = "Связь",
+                    iconRes = "",
+                    color = 0,
+                    type = "expense"
+                ),
+                CategoryEntity(
+                    id = 7,
+                    name = "Машина",
+                    iconRes = "",
+                    color = 0,
+                    type = "expense"
+                ),
+                CategoryEntity(
+                    id = 8,
+                    name = "Кафе",
+                    iconRes = "",
+                    color = 0,
+                    type = "expense"
+                ),
+                CategoryEntity(
+                    id = 9,
+                    name = "Подарки",
+                    iconRes = "",
+                    color = 0,
+                    type = "expense"
+                ),
+                CategoryEntity(
+                    id = 10,
+                    name = "Такси",
+                    iconRes = "",
+                    color = 0,
+                    type = "expense"
+                ),
+                CategoryEntity(
+                    id = 11,
+                    name = "Гигиенна",
+                    iconRes = "",
+                    color = 0,
+                    type = "expense"
+                ),
+                CategoryEntity(
+                    id = 12,
+                    name = "Здоровье",
+                    iconRes = "",
+                    color = 0,
+                    type = "expense"
+                )
             )
         }
 

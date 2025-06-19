@@ -35,4 +35,7 @@ interface CategoryDao {
     // Для инициализации базы данных стандартными категориями
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertDefaultCategories(categories: List<CategoryEntity>)
+
+    @Query("DELETE FROM categories")
+    suspend fun deleteAllCategories()
 }

@@ -42,4 +42,7 @@ interface BudgetDao {
     @Transaction
     @Query("SELECT * FROM budgets WHERE isActive = 1")
     fun getActiveBudgetsWithCategories(): Flow<List<BudgetWithCategory>>
+
+    @Query("DELETE FROM budgets")
+    suspend fun deleteAllBudgets()
 }
